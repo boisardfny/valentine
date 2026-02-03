@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #ffe6f0;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 40px;
+    color: #ff4d88;
+}
+
+button {
+    font-size: 20px;
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#yes {
+    background-color: #ff4d88;
+    color: white;
+}
+
+#no {
+    background-color: #cccccc;
+    position: fixed;
+    left: 55%;
+    top: 55%;
+    transition: 0.15s;
+}
+
+#message {
+    margin-top: 30px;
+    font-size: 28px;
+    color: #ff4d88;
+    display: none;
+}
+
+.heart {
+    position: fixed;
+    font-size: 24px;
+    pointer-events: none;
+    animation: explode 1.5s ease-out forwards;
+}
+
+@keyframes explode {
+    0% { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) scale(1.8); opacity: 0; }
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Do you want to be my Valentine? ❤️</h1>
+
+<button id="yes">Yes</button>
+<button id="no">No</button>
+
+<div id="message">YAYYYY ❤️🥰</div>
+
+<script>
+
+const noButton = document.getElementById("no");
+const yesButton = document.getElementById("yes");
+const message = document.getElementById("message");
+
+/* Bouton NON qui fuit */
+
+document.addEventListener("mousemove", (e) => {
+
+    const rect = noButton.getBoundingClientRect();
+
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+
+    if (distance < 120) {
+
+        const maxX = window.innerWidth - rect.width - 10;
+        const maxY = window.innerHeight - rect.height - 10;
+
+        const newX = Math.random() * maxX;
+        const newY = Math.random() * maxY;
+
+        noButton.style.left = newX + "px";
+        noButton.style.top = newY + "px";
+    }
+});
+
+
+/* Explosion de coeurs */
+
+yesButton.addEventListener("click", () => {
+
+    message.style.display = "block";
+
+    const rect = yesButton.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height / 2;
+
+    for (let i = 0; i < 50; i++) {
+
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+
+        heart.style.left = originX + "px";
+        heart.style.top = originY + "px";
+
+        const x = (Math.random() - 0.5) * 600 + "px";
+        const y = (Math.random() - 0.5) * 600 + "px";
+
+        heart.style.setProperty("--x", x);
+        heart.style.setProperty("--y", y);
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 1500);
+    }
+});
+
+</script>
+
+</body>
+</html>
