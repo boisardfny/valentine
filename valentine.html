@@ -30,7 +30,7 @@ h1 {
     justify-content: center;
     align-items: center;
     gap: 40px; /* espace entre YES et NO */
-    position: relative;
+    margin-top: 30px;
 }
 
 /* Style des boutons */
@@ -47,10 +47,10 @@ button {
     color: white;
 }
 
-/* Le bouton NO sera déplacé ensuite */
+/* Bouton NO : positionné au départ mais ne bouge pas tant que la souris n'est pas proche */
 #no {
     background-color: #cccccc;
-    position: absolute; /* important */
+    position: fixed;
     transition: 0.15s;
 }
 
@@ -61,7 +61,7 @@ button {
     display: none;
 }
 
-/* Coeurs */
+/* ❤️ Coeurs */
 .heart {
     position: fixed;
     font-size: 24px;
@@ -89,28 +89,31 @@ button {
 <div id="message">YAYYYY ❤️🥰</div>
 
 <script>
+
 const noButton = document.getElementById("no");
 const yesButton = document.getElementById("yes");
 
-/* Positionner NO à droite de YES au départ */
+/* ⭐ Positionner NO à côté de YES au centre */
 window.addEventListener("load", () => {
     const rectYes = yesButton.getBoundingClientRect();
 
-    noButton.style.left = rectYes.right + 40 + "px";  // 40px d'écart
+    // On place NO à droite de YES (40px d'écart)
+    noButton.style.left = rectYes.right + 40 + "px";
     noButton.style.top = rectYes.top + "px";
 });
 
-/* Bouton NON qui fuit uniquement si la souris est proche */
+/* ⭐ Bouton NON qui fuit uniquement si la souris est proche */
 document.addEventListener("mousemove", (e) => {
-    const rect = noButton.getBoundingClientRect();
 
+    const rect = noButton.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
     const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
 
-    /* NE BOUGE QUE SI LA SOURIS EST À MOINS DE 120px */
+    // NE BOUGE QUE SI LA SOURIS EST À MOINS DE 120px
     if (distance < 120) {
+
         const maxX = window.innerWidth - rect.width - 10;
         const maxY = window.innerHeight - rect.height - 10;
 
@@ -122,8 +125,9 @@ document.addEventListener("mousemove", (e) => {
     }
 });
 
-/* Explosion de coeurs + redirection */
+/* ❤️ Explosion de coeurs */
 yesButton.addEventListener("click", () => {
+
     const rect = yesButton.getBoundingClientRect();
     const originX = rect.left + rect.width / 2;
     const originY = rect.top + rect.height / 2;
@@ -146,10 +150,6 @@ yesButton.addEventListener("click", () => {
 
         setTimeout(() => heart.remove(), 1500);
     }
-
-    setTimeout(() => {
-        window.location.href = "final.html";
-    }, 1500);
 });
 </script>
 
