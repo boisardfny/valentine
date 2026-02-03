@@ -45,6 +45,8 @@ button {
 #no {
     background-color: #cccccc;
     position: fixed;
+    left: 55%;
+    top: 55%;
     transition: 0.15s;
 }
 
@@ -55,21 +57,22 @@ button {
     display: none;
 }
 
-/* ❤️ Animation coeurs */
+/* ❤️ coeurs */
 
 .heart {
     position: fixed;
-    font-size: 30px;
-    animation: fall 2s linear forwards;
+    font-size: 24px;
+    pointer-events: none;
+    animation: explode 1.5s ease-out forwards;
 }
 
-@keyframes fall {
+@keyframes explode {
     0% {
-        transform: translateY(0) scale(1);
+        transform: translate(0,0) scale(1);
         opacity: 1;
     }
     100% {
-        transform: translateY(300px) scale(1.5);
+        transform: translate(var(--x), var(--y)) scale(1.8);
         opacity: 0;
     }
 }
@@ -94,19 +97,25 @@ const noButton = document.getElementById("no");
 const yesButton = document.getElementById("yes");
 const message = document.getElementById("message");
 
-/* ❌ Bouton NON qui fuit la souris */
+
+/* ❌ Bouton NON qui fuit mais reste visible */
 
 document.addEventListener("mousemove", (e) => {
 
     const rect = noButton.getBoundingClientRect();
 
-    const distanceX = Math.abs(e.clientX - (rect.left + rect.width / 2));
-    const distanceY = Math.abs(e.clientY - (rect.top + rect.height / 2));
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
 
-    if (distanceX < 120 && distanceY < 80) {
+    const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
 
-        const newX = Math.random() * (window.innerWidth - rect.width);
-        const newY = Math.random() * (window.innerHeight - rect.height);
+    if (distance < 120) {
+
+        const maxX = window.innerWidth - rect.width - 10;
+        const maxY = window.innerHeight - rect.height - 10;
+
+        const newX = Math.random() * maxX;
+        const newY = Math.random() * maxY;
 
         noButton.style.left = newX + "px";
         noButton.style.top = newY + "px";
@@ -114,26 +123,35 @@ document.addEventListener("mousemove", (e) => {
 });
 
 
-/* ❤️ Explosion de coeurs quand YES */
+/* ❤️ Explosion depuis bouton YES */
 
 yesButton.addEventListener("click", () => {
 
     message.style.display = "block";
 
-    for (let i = 0; i < 40; i++) {
+    const rect = yesButton.getBoundingClientRect();
+    const originX = rect.left + rect.width / 2;
+    const originY = rect.top + rect.height / 2;
+
+    for (let i = 0; i < 50; i++) {
 
         const heart = document.createElement("div");
-        heart.classList.add("heart");
+        heart.className = "heart";
         heart.innerHTML = "❤️";
 
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.top = Math.random() * window.innerHeight + "px";
+        heart.style.left = originX + "px";
+        heart.style.top = originY + "px";
+
+        // direction aléatoire
+        const x = (Math.random() - 0.5) * 600 + "px";
+        const y = (Math.random() - 0.5) * 600 + "px";
+
+        heart.style.setProperty("--x", x);
+        heart.style.setProperty("--y", y);
 
         document.body.appendChild(heart);
 
-        setTimeout(() => {
-            heart.remove();
-        }, 2000);
+        setTimeout(() => heart.remove(), 1500);
     }
 });
 
