@@ -100,7 +100,7 @@ window.addEventListener("load", () => {
     noButton.style.top = rectYes.top + "px";
 });
 
-/* Bouton NON qui fuit */
+/* Bouton NON qui fuit uniquement si la souris est proche */
 document.addEventListener("mousemove", (e) => {
     const rect = noButton.getBoundingClientRect();
 
@@ -109,6 +109,7 @@ document.addEventListener("mousemove", (e) => {
 
     const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
 
+    /* NE BOUGE QUE SI LA SOURIS EST À MOINS DE 120px */
     if (distance < 120) {
         const maxX = window.innerWidth - rect.width - 10;
         const maxY = window.innerHeight - rect.height - 10;
