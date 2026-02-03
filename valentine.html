@@ -24,15 +24,15 @@ h1 {
     color: #ff4d88;
 }
 
-/* Conteneur des deux boutons */
+/* Conteneur du bouton YES (centré) */
 .buttons {
     display: flex;
-    gap: 40px; /* espace entre les boutons */
     justify-content: center;
     align-items: center;
     margin-top: 20px;
 }
 
+/* Boutons */
 button {
     font-size: 20px;
     padding: 12px 25px;
@@ -46,10 +46,10 @@ button {
     color: white;
 }
 
-/* Bouton NO qui fuit */
+/* Bouton NO : sera placé en JS à côté du YES */
 #no {
     background-color: #cccccc;
-    position: absolute; /* important pour qu'il puisse bouger */
+    position: fixed;
     transition: 0.15s;
 }
 
@@ -81,20 +81,31 @@ button {
 
 <div class="buttons">
     <button id="yes">Yes</button>
-    <button id="no">No</button>
 </div>
+
+<button id="no">No</button>
 
 <div id="message">YAYYYY ❤️🥰</div>
 
 <script>
-
 const noButton = document.getElementById("no");
 const yesButton = document.getElementById("yes");
 const message = document.getElementById("message");
 
+/* Positionner le bouton NO au départ, aligné sur la même ligne que YES */
+window.addEventListener("load", () => {
+    const rectYes = yesButton.getBoundingClientRect();
+
+    // On place NO à droite de YES avec un petit écart
+    const startX = rectYes.right + 40;
+    const startY = rectYes.top;
+
+    noButton.style.left = startX + "px";
+    noButton.style.top = startY + "px";
+});
+
 /* Bouton NON qui fuit */
 document.addEventListener("mousemove", (e) => {
-
     const rect = noButton.getBoundingClientRect();
 
     const centerX = rect.left + rect.width / 2;
@@ -103,7 +114,6 @@ document.addEventListener("mousemove", (e) => {
     const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY);
 
     if (distance < 120) {
-
         const maxX = window.innerWidth - rect.width - 10;
         const maxY = window.innerHeight - rect.height - 10;
 
@@ -117,7 +127,6 @@ document.addEventListener("mousemove", (e) => {
 
 /* Explosion de coeurs + redirection */
 yesButton.addEventListener("click", () => {
-
     const rect = yesButton.getBoundingClientRect();
     const originX = rect.left + rect.width / 2;
     const originY = rect.top + rect.height / 2;
@@ -145,7 +154,6 @@ yesButton.addEventListener("click", () => {
         window.location.href = "final.html";
     }, 1500);
 });
-
 </script>
 
 </body>
